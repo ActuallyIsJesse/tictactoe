@@ -12,6 +12,10 @@ body {
     justify-content: center;
 }
 
+.wrapper {
+    padding: 2rem;
+}
+
 table {
     border-collapse: collapse;
 }
