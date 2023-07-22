@@ -25,11 +25,13 @@ const game = (function () {
 
   const checkWinner = function () {
     const currentBoard = gameBoard.view();
-    console.log(currentBoard.length);
-    for (let i = 0; i > 4; i++) {
-      console.log(currentBoard[i]);
-      for (let j = 0; j === currentBoard[j].length; j++) {
-        console.log(currentBoard[i][j]);
+    for (let i = 0; i < currentBoard.length; i++) {
+      if (currentBoard[i][0] === null) {continue}  
+      if (
+        currentBoard[i][0] === currentBoard[i][1] &&
+        currentBoard[i][1] === currentBoard[i][2]
+      ) {
+        console.log("here");
       }
     }
   };
