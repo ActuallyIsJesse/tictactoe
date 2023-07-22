@@ -39,6 +39,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  opacity: 0;
   transition: opacity 0.5s;
 }
 
@@ -76,12 +77,14 @@ button:active {
     border: 1px solid #c9c9c9;
     border-radius: 0.25rem;
     padding: 6rem 4rem;
-    display: flex;
+    display: none;
+    opacity: 0;
     gap: 2rem;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    display: none;
+    transition: opacity 0.5s;
+
 }
 
 table {

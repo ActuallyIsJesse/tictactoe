@@ -1,3 +1,47 @@
+const domHandler = (function () {
+  const playerCountWindowEl = document.querySelector(".player-pick");
+  const gameboardEl = document.querySelector(".board-wrapper")
+
+  const playerCountWindow = (function() {
+    function hide() {
+      playerCountWindowEl.style.setProperty("opacity", "0");
+      setTimeout(() => {
+        playerCountWindowEl.style.setProperty("display", "none");
+      }, 300);
+    }
+    
+    function show() {
+        playerCountWindowEl.style.setProperty("opacity", "0");
+        playerCountWindowEl.style.setProperty("display", "flex");
+        setTimeout(() => { 
+            playerCountWindowEl.style.setProperty("opacity", "1");
+        }, 300);
+    }
+    return { hide, show };
+  })();
+  const gameBoard = (function() {
+    function hide() {
+      gameboardEl.style.setProperty("opacity", "0");
+      setTimeout(() => {
+        gameboardEl.style.setProperty("display", "none");
+      }, 300);
+    }
+    
+    function show() {
+        gameboardEl.style.setProperty("opacity", "0");
+        gameboardEl.style.setProperty("display", "flex");
+        setTimeout(() => { 
+            gameboardEl.style.setProperty("opacity", "1");
+        }, 300);
+    }
+    return { hide, show };
+  })();
+
+
+
+  return { playerCountWindow, gameBoard };
+})();
+
 const game = (function () {
   "use strict";
   const gameSettings = {
@@ -7,11 +51,12 @@ const game = (function () {
   const _initializeGame = (function () {
     document.querySelector("#one-player").addEventListener("click", () => {
       gameSettings.players = 1;
-      domHandler.hidePlayerCountWindow()
+      domHandler.playerCountWindow.hide();
     });
     document.querySelector("#two-player").addEventListener("click", () => {
       gameSettings.players = 2;
     });
+    domHandler.playerCountWindow.show();
   })();
 
   const playMove = function (event) {
@@ -145,18 +190,6 @@ const gameBoard = (function () {
   return { view, update, viewDom };
 })();
 
-const domHandler = (function () {
-  const playerCountWindow = document.querySelector(".player-pick");
-
-  function hidePlayerCountWindow() {
-    playerCountWindow.style.setProperty("opacity", "0");
-    setTimeout(() => {
-      playerCountWindow.style.setProperty("display", "none");
-    }, 300);
-  }
-
-  return {hidePlayerCountWindow, }
-})();
 
 const players = (function () {
   "use strict";
