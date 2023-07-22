@@ -52,6 +52,7 @@ const game = (function () {
     document.querySelector("#one-player").addEventListener("click", () => {
       gameSettings.players = 1;
       domHandler.playerCountWindow.hide();
+      setTimeout(domHandler.gameBoard.show, 500);
     });
     document.querySelector("#two-player").addEventListener("click", () => {
       gameSettings.players = 2;
@@ -155,7 +156,7 @@ const gameBoard = (function () {
   ];
   const _boardDom = [];
 
-  const _initializeBoard = (function () {
+  const _initialize = (function () {
     // Assign table elements to variables and add event listeners
     _boardDom[0] = document.querySelectorAll(".top-row > td > div");
     _boardDom[1] = document.querySelectorAll(".middle-row > td > div");
@@ -167,6 +168,15 @@ const gameBoard = (function () {
       });
     });
   })();
+
+  const disable = function () {
+    _boardDom.forEach((currentValue) => {
+        currentValue.forEach((newCurrentValue, newCurrentIndex) => {
+          newCurrentValue.dataset.index = newCurrentIndex;
+          removeEventListener("click", game.playMove);
+        });
+      });
+  }
 
   function view() {
     const boardCopy = _board;
@@ -187,7 +197,7 @@ const gameBoard = (function () {
     _updateDom(player, row, cell);
   }
 
-  return { view, update, viewDom };
+  return { view, update, viewDom, disable };
 })();
 
 
