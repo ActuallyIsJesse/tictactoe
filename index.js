@@ -24,16 +24,23 @@ const game = (function () {
   };
 
   const checkWinner = function () {
-    const currentBoard = gameBoard.view();
-    for (let i = 0; i < currentBoard.length; i++) {
-      if (currentBoard[i][0] === null) {continue}  
-      if (
-        currentBoard[i][0] === currentBoard[i][1] &&
-        currentBoard[i][1] === currentBoard[i][2]
-      ) {
-        console.log("here");
+    const currentBoard = gameBoard.view(); // Get the current board state
+    let winner = "none";
+    const _horizontalRowCheck = (function () {
+      for (let i = 0; i < currentBoard.length; i++) {
+        if (currentBoard[i][0] === null) {
+          continue; // This keeps us from returning a win when there's an empty row
+        }
+        if (
+          currentBoard[i][0] === currentBoard[i][1] &&
+          currentBoard[i][1] === currentBoard[i][2]
+        ) {
+          winner = currentBoard[i][0];
+          return winner;
+        }
       }
-    }
+    })();
+    return winner;
   };
 
   return { playMove, checkWinner };
