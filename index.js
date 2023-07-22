@@ -36,7 +36,6 @@ const game = (function () {
           currentBoard[i][1] === currentBoard[i][2]
         ) {
           winner = currentBoard[i][0];
-          return winner;
         }
       }
     })();
