@@ -1,43 +1,41 @@
 const domHandler = (function () {
   const playerCountWindowEl = document.querySelector(".player-pick");
-  const gameboardEl = document.querySelector(".board-wrapper")
+  const gameboardEl = document.querySelector(".board-wrapper");
 
-  const playerCountWindow = (function() {
+  const playerCountWindow = (function () {
     function hide() {
       playerCountWindowEl.style.setProperty("opacity", "0");
       setTimeout(() => {
         playerCountWindowEl.style.setProperty("display", "none");
       }, 300);
     }
-    
+
     function show() {
-        playerCountWindowEl.style.setProperty("opacity", "0");
-        playerCountWindowEl.style.setProperty("display", "flex");
-        setTimeout(() => { 
-            playerCountWindowEl.style.setProperty("opacity", "1");
-        }, 300);
+      playerCountWindowEl.style.setProperty("opacity", "0");
+      playerCountWindowEl.style.setProperty("display", "flex");
+      setTimeout(() => {
+        playerCountWindowEl.style.setProperty("opacity", "1");
+      }, 300);
     }
     return { hide, show };
   })();
-  const gameBoard = (function() {
+  const gameBoard = (function () {
     function hide() {
       gameboardEl.style.setProperty("opacity", "0");
       setTimeout(() => {
         gameboardEl.style.setProperty("display", "none");
       }, 300);
     }
-    
+
     function show() {
-        gameboardEl.style.setProperty("opacity", "0");
-        gameboardEl.style.setProperty("display", "flex");
-        setTimeout(() => { 
-            gameboardEl.style.setProperty("opacity", "1");
-        }, 300);
+      gameboardEl.style.setProperty("opacity", "0");
+      gameboardEl.style.setProperty("display", "flex");
+      setTimeout(() => {
+        gameboardEl.style.setProperty("opacity", "1");
+      }, 300);
     }
     return { hide, show };
   })();
-
-
 
   return { playerCountWindow, gameBoard };
 })();
@@ -79,6 +77,15 @@ const game = (function () {
       if (currentBoard[row][column] === null) {
         gameBoard.update(players.active(), row, column);
         players.updatePlayerState();
+        if (
+          game.checkWinner === "tie" ||
+          game.checkWinner() === "X" ||
+          game.checkWinner() === "O"
+        ) {
+          console.log("Winner!");
+          console.log(game.checkWinner());
+          gameBoard.disable();
+        }
       }
     }
   };
@@ -121,6 +128,7 @@ const game = (function () {
     const _diagonalRowCheck = (function () {
       // Top left to bottom right check
       if (
+        currentBoard[0][0] != null &&
         currentBoard[0][0] === currentBoard[1][1] &&
         currentBoard[1][1] === currentBoard[2][2]
       ) {
@@ -128,6 +136,7 @@ const game = (function () {
       }
       // Bottom left to top right check
       if (
+        currentBoard[0][2] != null &&
         currentBoard[0][2] === currentBoard[1][1] &&
         currentBoard[1][1] === currentBoard[2][0]
       ) {
@@ -171,12 +180,12 @@ const gameBoard = (function () {
 
   const disable = function () {
     _boardDom.forEach((currentValue) => {
-        currentValue.forEach((newCurrentValue, newCurrentIndex) => {
-          newCurrentValue.dataset.index = newCurrentIndex;
-          removeEventListener("click", game.playMove);
-        });
+      currentValue.forEach((newCurrentValue, newCurrentIndex) => {
+        newCurrentValue.dataset.index = newCurrentIndex;
+        removeEventListener("click", game.playMove);
       });
-  }
+    });
+  };
 
   function view() {
     const boardCopy = _board;
@@ -199,7 +208,6 @@ const gameBoard = (function () {
 
   return { view, update, viewDom, disable };
 })();
-
 
 const players = (function () {
   "use strict";
