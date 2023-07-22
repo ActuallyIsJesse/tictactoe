@@ -1,75 +1,143 @@
+@import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
+
 :root {
-    --cell-height: 8rem;
-    --cell-width: 8rem;
-    font-family: sans-serif;
+  --cell-height: 8rem;
+  --cell-width: 8rem;
+  font-family: sans-serif;
 }
 
 body {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url(background.svg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.logo {
+  margin: 0;
+  font-size: 6rem;
+  font-family: "Lobster", cursive;
+  color: #ff9800;
+  transition: scale 0.5s;
+}
+
+.logo:hover {
+  scale: 1.02;
+}
+
+.player-pick {
+  background-color: #f9f9f9;
+  border: 1px solid #c9c9c9;
+  border-radius: 0.25rem;
+  padding: 6rem 4rem;
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s;
+}
+
+.player-button-wrapper {
+  display: flex;
+  gap: 2rem;
+}
+
+button {
+  background-color: #ff9800;
+  font-size: 2rem;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  transition: background-color 0.25s;
+  transition: scale 0.25s;
+}
+
+button:hover {
+  background-color: #ffc876;
+  scale: 1.02;
+}
+
+button:active {
+  background-color: #c77700;
+  scale: 1.02;
 }
 
 .wrapper {
-    padding: 2rem;
+  padding: 2rem;
+}
+
+.board-wrapper {
+    background-color: #f9f9f9;
+    border: 1px solid #c9c9c9;
+    border-radius: 0.25rem;
+    padding: 6rem 4rem;
+    display: flex;
+    gap: 2rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    display: none;
 }
 
 table {
-    border-collapse: collapse;
+  border-collapse: collapse;
 }
 
 .cell {
-    height: var(--cell-height);
-    width: var(--cell-width);
-    font-size: 10rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  height: var(--cell-height);
+  width: var(--cell-width);
+  font-size: 10rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .top-row > td:first-child {
-    border: solid black;
-    border-width: 0 0.5rem 0.5rem 0;
+  border: solid black;
+  border-width: 0 0.5rem 0.5rem 0;
 }
 
 .top-row > td:nth-child(2) {
-    border: solid black;
-    border-width: 0 0.5rem 0.5rem 0.5rem;
+  border: solid black;
+  border-width: 0 0.5rem 0.5rem 0.5rem;
 }
 
 .top-row > td:last-child {
-    border: solid black;
-    border-width: 0 0 0.5rem 0.5rem;
+  border: solid black;
+  border-width: 0 0 0.5rem 0.5rem;
 }
 
 .middle-row > td:first-child {
-    border: solid black;
-    border-width: 0.5rem 0.5rem 0.5rem 0;
+  border: solid black;
+  border-width: 0.5rem 0.5rem 0.5rem 0;
 }
 
 .middle-row > td:nth-child(2) {
-    border: solid black;
-    border-width: 0.5rem 0.5rem 0.5rem .5rem;
+  border: solid black;
+  border-width: 0.5rem 0.5rem 0.5rem 0.5rem;
 }
 
 .middle-row > td:last-child {
-    border: solid black;
-    border-width: 0.5rem 0 0.5rem 0.5rem;
+  border: solid black;
+  border-width: 0.5rem 0 0.5rem 0.5rem;
 }
 
 .bottom-row > td:first-child {
-    border: solid black;
-    border-width: 0.5rem 0.5rem 0 0;
+  border: solid black;
+  border-width: 0.5rem 0.5rem 0 0;
 }
 
 .bottom-row > td:nth-child(2) {
-    border: solid black;
-    border-width: 0.5rem 0.5rem 0 0.5rem;
+  border: solid black;
+  border-width: 0.5rem 0.5rem 0 0.5rem;
 }
 
 .bottom-row > td:last-child {
-    border: solid black;
-    border-width: 0.5rem 0 0 0.5rem;
+  border: solid black;
+  border-width: 0.5rem 0 0 0.5rem;
 }

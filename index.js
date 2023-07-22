@@ -1,5 +1,19 @@
 const game = (function () {
   "use strict";
+  const gameSettings = {
+    players: 1,
+  };
+
+  const _initializeGame = (function () {
+    document.querySelector("#one-player").addEventListener("click", () => {
+      gameSettings.players = 1;
+      domHandler.hidePlayerCountWindow()
+    });
+    document.querySelector("#two-player").addEventListener("click", () => {
+      gameSettings.players = 2;
+    });
+  })();
+
   const playMove = function (event) {
     const currentBoard = gameBoard.view();
     if (event.target.dataset.index) {
@@ -26,9 +40,12 @@ const game = (function () {
   const checkWinner = function () {
     const currentBoard = gameBoard.view(); // Get the current board state
     let winner = "none";
+    let nullCount = 0;
+
     const _horizontalRowCheck = (function () {
       for (let i = 0; i < currentBoard.length; i++) {
         if (currentBoard[i][0] === null) {
+          nullCount++;
           continue; // This keeps us from returning a win when there's an empty row
         }
         if (
@@ -39,11 +56,50 @@ const game = (function () {
         }
       }
     })();
-    return winner;
+
+    const _veritcalRowCheck = (function () {
+      for (let i = 0; i < currentBoard.length; i++) {
+        if (currentBoard[0][i] === null) {
+          nullCount++;
+          continue; // This keeps us from returning a win when there's an empty row
+        }
+        if (
+          currentBoard[0][i] === currentBoard[1][i] &&
+          currentBoard[1][i] === currentBoard[2][i]
+        ) {
+          winner = currentBoard[0][i];
+        }
+      }
+    })();
+
+    const _diagonalRowCheck = (function () {
+      // Top left to bottom right check
+      if (
+        currentBoard[0][0] === currentBoard[1][1] &&
+        currentBoard[1][1] === currentBoard[2][2]
+      ) {
+        winner = currentBoard[0][0];
+      }
+      // Bottom left to top right check
+      if (
+        currentBoard[0][2] === currentBoard[1][1] &&
+        currentBoard[1][1] === currentBoard[2][0]
+      ) {
+        winner = currentBoard[0][2];
+      }
+    })();
+
+    if (winner === "none" && nullCount === 0) {
+      return "tie";
+    } else return winner;
   };
 
   return { playMove, checkWinner };
 })();
+
+const playerFactory = (playerName, sign) => {
+  return { playerName, sign };
+};
 
 const gameBoard = (function () {
   "use strict";
@@ -87,6 +143,19 @@ const gameBoard = (function () {
   }
 
   return { view, update, viewDom };
+})();
+
+const domHandler = (function () {
+  const playerCountWindow = document.querySelector(".player-pick");
+
+  function hidePlayerCountWindow() {
+    playerCountWindow.style.setProperty("opacity", "0");
+    setTimeout(() => {
+      playerCountWindow.style.setProperty("display", "none");
+    }, 300);
+  }
+
+  return {hidePlayerCountWindow, }
 })();
 
 const players = (function () {
