@@ -24,11 +24,19 @@ body {
   font-size: 6rem;
   font-family: "Lobster", cursive;
   color: #ff9800;
-  transition: scale 0.5s;
+  animation: swing 2s ease-in-out infinite;
 }
 
-.logo:hover {
-  scale: 1.02;
+@keyframes swing {
+    0% {
+    transform: rotate(-5deg)
+    }
+    50% {
+        transform: rotate(5deg)
+    }
+    100% {
+    transform: rotate(-5deg)
+    }
 }
 
 .player-pick {

@@ -46,7 +46,7 @@ const game = (function () {
     players: 1,
   };
 
-  const _initializeGame = (function () {
+  const _initializeGame = (function () { // Handles the initial windows at the start of the game
     document.querySelector("#one-player").addEventListener("click", () => {
       gameSettings.players = 1;
       domHandler.playerCountWindow.hide();
@@ -60,10 +60,10 @@ const game = (function () {
 
   const playMove = function (event) {
     const currentBoard = gameBoard.view();
-    if (event.target.dataset.index) {
+    if (event.target.dataset.index) { // Checks to see if user clocked on a valid area 
       let row = 0;
       let column = event.target.dataset.index;
-      switch (event.target.parentElement.parentElement.classList.value) {
+      switch (event.target.parentElement.parentElement.classList.value) { // Pulls information about which row the target click was on
         case "top-row":
           row = 0;
           break;
@@ -74,7 +74,7 @@ const game = (function () {
           row = 2;
           break;
       }
-      if (currentBoard[row][column] === null) {
+      if (currentBoard[row][column] === null) { // This ensures we're only playing on empty squares
         gameBoard.update(players.active(), row, column);
         players.updatePlayerState();
         if (
@@ -99,7 +99,7 @@ const game = (function () {
       for (let i = 0; i < currentBoard.length; i++) {
         if (currentBoard[i][0] === null) {
           nullCount++;
-          continue; // This keeps us from returning a win when there's an empty row
+          continue; // Ensures we aren't returning a win when there's an empty row
         }
         if (
           currentBoard[i][0] === currentBoard[i][1] &&
@@ -178,7 +178,7 @@ const gameBoard = (function () {
     });
   })();
 
-  const disable = function () {
+  const disable = function () { //removes event listeners set by _initialize
     _boardDom.forEach((currentValue) => {
       currentValue.forEach((newCurrentValue, newCurrentIndex) => {
         newCurrentValue.dataset.index = newCurrentIndex;
@@ -193,7 +193,7 @@ const gameBoard = (function () {
     return boardCopy;
   }
 
-  function viewDom() {
+  function viewDom() { // returns a copy of the DOM array
     const domCopy = [_topRowDom, _middleRowDom, _bottomRowDom];
   }
 
