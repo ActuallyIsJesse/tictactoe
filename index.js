@@ -1,43 +1,58 @@
 const domHandler = (function () {
   const playerCountWindowEl = document.querySelector(".player-pick");
   const gameboardEl = document.querySelector(".board-wrapper");
+  const nameEntryEl = document.querySelector(".player-name");
+
+  function _hide(element) {
+    element.style.setProperty("opacity", "0");
+    setTimeout(() => {
+      element.style.setProperty("display", "none");
+    }, 300);
+  }
+
+  function _show(element) {
+    element.style.setProperty("opacity", "0");
+    element.style.setProperty("display", "flex");
+    setTimeout(() => {
+      element.style.setProperty("opacity", "1");
+    }, 300);
+  }
 
   const playerCountWindow = (function () {
     function hide() {
-      playerCountWindowEl.style.setProperty("opacity", "0");
-      setTimeout(() => {
-        playerCountWindowEl.style.setProperty("display", "none");
-      }, 300);
+      _hide(playerCountWindowEl);
     }
 
     function show() {
-      playerCountWindowEl.style.setProperty("opacity", "0");
-      playerCountWindowEl.style.setProperty("display", "flex");
-      setTimeout(() => {
-        playerCountWindowEl.style.setProperty("opacity", "1");
-      }, 300);
+      _show(playerCountWindowEl);
     }
     return { hide, show };
   })();
+
+  const nameEntry = (function () {
+    function hide() {
+      _hide(nameEntryEl);
+    }
+
+    function show() {
+      _show(nameEntryEl);
+    }
+
+    return { hide, show };
+  })();
+
   const gameBoard = (function () {
     function hide() {
-      gameboardEl.style.setProperty("opacity", "0");
-      setTimeout(() => {
-        gameboardEl.style.setProperty("display", "none");
-      }, 300);
+      _hide(gameboardEl);
     }
 
     function show() {
-      gameboardEl.style.setProperty("opacity", "0");
-      gameboardEl.style.setProperty("display", "flex");
-      setTimeout(() => {
-        gameboardEl.style.setProperty("opacity", "1");
-      }, 300);
+     _show(gameboardEl);
     }
     return { hide, show };
   })();
 
-  return { playerCountWindow, gameBoard };
+  return { playerCountWindow, gameBoard, nameEntry };
 })();
 
 const game = (function () {
@@ -51,11 +66,15 @@ const game = (function () {
     document.querySelector("#one-player").addEventListener("click", () => {
       gameSettings.players = 1;
       domHandler.playerCountWindow.hide();
-      setTimeout(domHandler.gameBoard.show, 500);
+      setTimeout(domHandler.nameEntry.show, 500);
     });
     document.querySelector("#two-player").addEventListener("click", () => {
       gameSettings.players = 2;
     });
+    document.querySelector("input[type=submit]").addEventListener("submit", (event) => {
+        event.preventDefault();
+        console.log(event.target);
+    })
     domHandler.playerCountWindow.show();
   })();
 
@@ -243,7 +262,7 @@ const players = (function () {
   const getWinnerName = () => {
     let winner = players.filter((item) => item.sign === game.checkWinner());
     console.log(winner);
-      return winner[0].playerName;
+    return winner[0].playerName;
   };
 
   return { updatePlayerState, active, creator, list, getWinnerName };

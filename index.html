@@ -8,7 +8,6 @@
     <title>Tic-Tac-Toe</title>
   </head>
   <body>
-    
     <div class="wrapper">
       <div class="player-pick">
         <h1 class="logo">Tic-Tac-Toe</h1>
@@ -17,7 +16,31 @@
           <button id="two-player">Two Players</button>
         </div>
       </div>
-      <div class="player-name"></div>
+      <div class="player-name">
+        <h2 class="one-player">Enter your name</h2>
+        <h2 class="two-player">Enter your names</h2>
+        <div class="name-form one-player">
+          <form action="">
+            <div class="form-text">
+              <input type="text" id="p1name" />
+            </div>
+            <input type="submit" />
+          </form>
+        </div>
+        <div class="name-form two-player">
+          <form action="">
+            <div class="form-text">
+              <label for="p1name">Player 1: </label>
+              <input type="text" id="p1name" />
+            </div>
+            <div class="form-text">
+              <label for="p2name">Player 2: </label>
+              <input type="text" id="p2name" />
+            </div>
+            <input type="submit" />
+          </form>
+        </div>
+      </div>
       <div class="board-wrapper">
         <table class="game-board">
           <tbody>
