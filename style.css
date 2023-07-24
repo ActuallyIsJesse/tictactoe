@@ -29,13 +29,13 @@ body {
 
 @keyframes swing {
     0% {
-    transform: rotate(-5deg)
+    transform: rotate(-2.5deg)
     }
     50% {
-        transform: rotate(5deg)
+        transform: rotate(2.5deg)
     }
     100% {
-    transform: rotate(-5deg)
+    transform: rotate(-2.5deg)
     }
 }
 

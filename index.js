@@ -46,7 +46,8 @@ const game = (function () {
     players: 1,
   };
 
-  const _initializeGame = (function () { // Handles the initial windows at the start of the game
+  const _initializeGame = (function () {
+    // Handles the initial windows at the start of the game
     document.querySelector("#one-player").addEventListener("click", () => {
       gameSettings.players = 1;
       domHandler.playerCountWindow.hide();
@@ -60,10 +61,13 @@ const game = (function () {
 
   const playMove = function (event) {
     const currentBoard = gameBoard.view();
-    if (event.target.dataset.index) { // Checks to see if user clocked on a valid area 
+    if (event.target.dataset.index) {
+      // Checks to see if user clocked on a valid area
       let row = 0;
       let column = event.target.dataset.index;
-      switch (event.target.parentElement.parentElement.classList.value) { // Pulls information about which row the target click was on
+      switch (
+        event.target.parentElement.parentElement.classList.value // Pulls information about which row the target click was on
+      ) {
         case "top-row":
           row = 0;
           break;
@@ -74,7 +78,8 @@ const game = (function () {
           row = 2;
           break;
       }
-      if (currentBoard[row][column] === null) { // This ensures we're only playing on empty squares
+      if (currentBoard[row][column] === null) {
+        // This ensures we're only playing on empty squares
         gameBoard.update(players.active(), row, column);
         players.updatePlayerState();
         if (
@@ -152,10 +157,6 @@ const game = (function () {
   return { playMove, checkWinner };
 })();
 
-const playerFactory = (playerName, sign) => {
-  return { playerName, sign };
-};
-
 const gameBoard = (function () {
   "use strict";
   const _board = [
@@ -178,7 +179,8 @@ const gameBoard = (function () {
     });
   })();
 
-  const disable = function () { //removes event listeners set by _initialize
+  const disable = function () {
+    //removes event listeners set by _initialize
     _boardDom.forEach((currentValue) => {
       currentValue.forEach((newCurrentValue, newCurrentIndex) => {
         newCurrentValue.dataset.index = newCurrentIndex;
@@ -193,7 +195,8 @@ const gameBoard = (function () {
     return boardCopy;
   }
 
-  function viewDom() { // returns a copy of the DOM array
+  function viewDom() {
+    // returns a copy of the DOM array
     const domCopy = [_topRowDom, _middleRowDom, _bottomRowDom];
   }
 
@@ -212,6 +215,7 @@ const gameBoard = (function () {
 const players = (function () {
   "use strict";
   let _activePlayer = "X";
+  let players = [];
 
   function updatePlayerState() {
     if (_activePlayer === "X") {
@@ -226,5 +230,20 @@ const players = (function () {
     return activePlayer;
   }
 
-  return { updatePlayerState, active };
+  const creator = (inputName) => {
+    let playerName = inputName;
+    let sign = active();
+    updatePlayerState();
+    players.push({ playerName, sign });
+    return { playerName, sign };
+  };
+
+  const list = () => players;
+
+  const getWinnerName = () => {
+    let winner = players.filter(item => item.sign === game.checkWinner());
+    return winner[0].playerName;
+  };
+
+  return { updatePlayerState, active, creator, list, getWinnerName };
 })();
