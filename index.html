@@ -20,11 +20,11 @@
         <h2 class="one-player">Enter your name</h2>
         <h2 class="two-player">Enter your names</h2>
         <div class="name-form one-player">
-          <form action="">
+          <form id="p1form" action="">
             <div class="form-text">
-              <input type="text" id="p1name" />
+              <input type="text" id="p1name" name="p1name"/>
             </div>
-            <input type="submit" />
+            <button type="submit">Let's Play!</button>
           </form>
         </div>
         <div class="name-form two-player">
@@ -37,7 +37,7 @@
               <label for="p2name">Player 2: </label>
               <input type="text" id="p2name" />
             </div>
-            <input type="submit" />
+            <button id="p2submit" type="submit">Let's Play!</button>
           </form>
         </div>
       </div>

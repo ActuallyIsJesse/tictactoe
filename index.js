@@ -47,13 +47,50 @@ const domHandler = (function () {
     }
 
     function show() {
-     _show(gameboardEl);
+      _show(gameboardEl);
     }
     return { hide, show };
   })();
 
   return { playerCountWindow, gameBoard, nameEntry };
 })();
+
+const players = (function () {
+    "use strict";
+    let _activePlayer = "X";
+    let players = [];
+  
+    function updatePlayerState() {
+      if (_activePlayer === "X") {
+        _activePlayer = "O";
+      } else {
+        _activePlayer = "X";
+      }
+    }
+  
+    function active() {
+      const activePlayer = _activePlayer;
+      return activePlayer;
+    }
+  
+    const creator = (inputName) => {
+      let playerName = inputName;
+      let sign = active();
+      updatePlayerState();
+      players.push({ playerName, sign });
+      return { playerName, sign };
+    };
+  
+    const list = () => players;
+  
+    const getWinnerName = () => {
+      let winner = players.filter((item) => item.sign === game.checkWinner());
+      console.log(`${winner[0].playerName} wins!`);
+      return winner[0].playerName;
+    };
+  
+    return { updatePlayerState, active, creator, list, getWinnerName };
+  })();
 
 const game = (function () {
   "use strict";
@@ -71,10 +108,14 @@ const game = (function () {
     document.querySelector("#two-player").addEventListener("click", () => {
       gameSettings.players = 2;
     });
-    document.querySelector("input[type=submit]").addEventListener("submit", (event) => {
-        event.preventDefault();
-        console.log(event.target);
-    })
+    document.querySelector("#p1form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      players.creator(event.target.querySelector("#p1name").value);
+      players.creator("Computer");
+      event.target.reset();
+      domHandler.nameEntry.hide();
+      setTimeout(domHandler.gameBoard.show, 500);
+    });
     domHandler.playerCountWindow.show();
   })();
 
@@ -106,9 +147,8 @@ const game = (function () {
           game.checkWinner() === "X" ||
           game.checkWinner() === "O"
         ) {
-          console.log("Winner!");
-          console.log(game.checkWinner());
           gameBoard.disable();
+          players.getWinnerName();
         }
       }
     }
@@ -170,7 +210,9 @@ const game = (function () {
 
     if (winner === "none" && nullCount === 0) {
       return "tie";
-    } else return winner;
+    } else {
+      return winner;
+    }
   };
 
   return { playMove, checkWinner };
@@ -231,39 +273,4 @@ const gameBoard = (function () {
   return { view, update, viewDom, disable };
 })();
 
-const players = (function () {
-  "use strict";
-  let _activePlayer = "X";
-  let players = [];
 
-  function updatePlayerState() {
-    if (_activePlayer === "X") {
-      _activePlayer = "O";
-    } else {
-      _activePlayer = "X";
-    }
-  }
-
-  function active() {
-    const activePlayer = _activePlayer;
-    return activePlayer;
-  }
-
-  const creator = (inputName) => {
-    let playerName = inputName;
-    let sign = active();
-    updatePlayerState();
-    players.push({ playerName, sign });
-    return { playerName, sign };
-  };
-
-  const list = () => players;
-
-  const getWinnerName = () => {
-    let winner = players.filter((item) => item.sign === game.checkWinner());
-    console.log(winner);
-    return winner[0].playerName;
-  };
-
-  return { updatePlayerState, active, creator, list, getWinnerName };
-})();
