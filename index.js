@@ -241,8 +241,9 @@ const players = (function () {
   const list = () => players;
 
   const getWinnerName = () => {
-    let winner = players.filter(item => item.sign === game.checkWinner());
-    return winner[0].playerName;
+    let winner = players.filter((item) => item.sign === game.checkWinner());
+    console.log(winner);
+      return winner[0].playerName;
   };
 
   return { updatePlayerState, active, creator, list, getWinnerName };
