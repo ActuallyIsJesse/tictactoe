@@ -91,13 +91,18 @@ const players = (function () {
     return { playerName, sign };
   };
 
-  const list = () => players;
+  function list() {
+    return players;
+  }
 
-  const getWinnerName = () => {
-    let winner = players.filter((item) => item.sign === game.checkWinner());
-    console.log(`${winner[0].playerName} wins!`);
-    return winner[0].playerName;
-  };
+  function getWinnerName(winnerSign) {
+    if (winnerSign === "tie") {
+      return "tie";
+    }
+    let winnerName = players.filter((item) => item.sign === winnerSign);
+    console.log(`${winnerName[0].playerName} wins!`);
+    return winnerName[0].playerName;
+  }
 
   return { updatePlayerState, active, creator, list, getWinnerName };
 })();
@@ -108,7 +113,7 @@ const game = (function () {
     players: 1,
   };
 
-  const _initializeGame = (function () {
+  const initializeGame = (function () {
     // Handles the initial windows at the start of the game
     document.querySelector("#one-player").addEventListener("click", () => {
       gameSettings.players = 1;
@@ -131,11 +136,11 @@ const game = (function () {
     domHandler.playerCountWindow.show();
   })();
 
-  const playerCount = () => {
+  function playerCount() {
     return gameSettings.players;
-  };
+  }
 
-  const playMove = function (event) {
+  function playMove(event) {
     const currentBoard = gameBoard.view();
     if (event.target.dataset.index) {
       // Checks to see if user clocked on a valid area
@@ -158,78 +163,77 @@ const game = (function () {
         // This ensures we're only playing on empty squares
         gameBoard.update(players.active(), row, column);
         players.updatePlayerState();
+        let checkWinner = game.checkWinner();
         if (
-          game.checkWinner === "tie" ||
-          game.checkWinner() === "X" ||
-          game.checkWinner() === "O"
+          checkWinner === "tie" ||
+          checkWinner === "X" ||
+          checkWinner === "O"
         ) {
           gameBoard.disable();
-          players.getWinnerName();
+          players.getWinnerName(checkWinner);
         }
       }
     }
-  };
+  }
 
-  const checkWinner = function () {
+  function checkWinner() {
     const currentBoard = gameBoard.view(); // Get the current board state
     let winner = "none";
     let nullCount = 0;
 
-    const _horizontalRowCheck = (function () {
-      for (let i = 0; i < currentBoard.length; i++) {
-        if (currentBoard[i][0] === null) {
-          nullCount++;
-          continue; // Ensures we aren't returning a win when there's an empty row
-        }
-        if (
-          currentBoard[i][0] === currentBoard[i][1] &&
-          currentBoard[i][1] === currentBoard[i][2]
-        ) {
-          winner = currentBoard[i][0];
+    // Vertical Row Check
+    for (let i = 0; i <= 2; i++) {
+      for (let j = 0; j <= 2; j++) {
+        if (currentBoard[i][j] === null) {
+          nullCount++; // Checks for empty board spaces
         }
       }
-    })();
-
-    const _veritcalRowCheck = (function () {
-      for (let i = 0; i < currentBoard.length; i++) {
-        if (currentBoard[0][i] === null) {
-          nullCount++;
-          continue; // This keeps us from returning a win when there's an empty row
-        }
-        if (
-          currentBoard[0][i] === currentBoard[1][i] &&
-          currentBoard[1][i] === currentBoard[2][i]
-        ) {
-          winner = currentBoard[0][i];
-        }
+      if (currentBoard[0][i] === null) {
+        continue; // This keeps us from returning a win when there's an empty row
       }
-    })();
-
-    const _diagonalRowCheck = (function () {
-      // Top left to bottom right check
       if (
-        currentBoard[0][0] != null &&
-        currentBoard[0][0] === currentBoard[1][1] &&
-        currentBoard[1][1] === currentBoard[2][2]
+        currentBoard[0][i] === currentBoard[1][i] &&
+        currentBoard[1][i] === currentBoard[2][i]
       ) {
-        winner = currentBoard[0][0];
+        winner = currentBoard[0][i];
       }
-      // Bottom left to top right check
-      if (
-        currentBoard[0][2] != null &&
-        currentBoard[0][2] === currentBoard[1][1] &&
-        currentBoard[1][1] === currentBoard[2][0]
-      ) {
-        winner = currentBoard[0][2];
+    }
+
+    // Horizontal row check
+    for (const row of currentBoard) {
+      if (row[0] === null) {
+        nullCount++;
+        continue;
       }
-    })();
+      if (row[0] === row[1] && row[1] === row[2]) {
+        winner = row[0];
+        console.log(winner);
+      }
+    }
+
+    // Top left to bottom right check
+    if (
+      currentBoard[0][0] != null &&
+      currentBoard[0][0] === currentBoard[1][1] &&
+      currentBoard[0][0] === currentBoard[2][2]
+    ) {
+      winner = currentBoard[0][0];
+    }
+    // Bottom left to top right check
+    if (
+      currentBoard[2][0] != null &&
+      currentBoard[2][0] === currentBoard[1][1] &&
+      currentBoard[2][0] === currentBoard[0][2]
+    ) {
+      winner = currentBoard[0][2];
+    }
 
     if (winner === "none" && nullCount === 0) {
       return "tie";
     } else {
       return winner;
     }
-  };
+  }
 
   return { playMove, checkWinner, playerCount };
 })();
@@ -243,7 +247,7 @@ const gameBoard = (function () {
   ];
   const _boardDom = [];
 
-  const _initialize = (function () {
+  function enable() {
     // Assign table elements to variables and add event listeners
     _boardDom[0] = document.querySelectorAll(".top-row > td > div");
     _boardDom[1] = document.querySelectorAll(".middle-row > td > div");
@@ -254,9 +258,9 @@ const gameBoard = (function () {
         addEventListener("click", game.playMove);
       });
     });
-  })();
+  }
 
-  const disable = function () {
+  function disable() {
     //removes event listeners set by _initialize
     _boardDom.forEach((currentValue) => {
       currentValue.forEach((newCurrentValue, newCurrentIndex) => {
@@ -264,7 +268,7 @@ const gameBoard = (function () {
         removeEventListener("click", game.playMove);
       });
     });
-  };
+  }
 
   function view() {
     const boardCopy = _board;
@@ -295,5 +299,9 @@ const gameBoard = (function () {
     }
   }
 
-  return { view, update, viewDom, disable, clear };
+  const initialize = (function () {
+    enable();
+  })();
+
+  return { view, update, viewDom, disable, clear, enable };
 })();
