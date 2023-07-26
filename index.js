@@ -286,5 +286,14 @@ const gameBoard = (function () {
     _updateDom(player, row, cell);
   }
 
-  return { view, update, viewDom, disable };
+  function clear() {
+    for (let i = 0; i < _board[0].length; i++) {
+      for (let j = 0; j < _board[0].length; j++) {
+        _board[i][j] = null;
+        _updateDom(null, i, j);
+      }
+    }
+  }
+
+  return { view, update, viewDom, disable, clear };
 })();
