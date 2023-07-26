@@ -2,6 +2,8 @@ const domHandler = (function () {
   const playerCountWindowEl = document.querySelector(".player-pick");
   const gameboardEl = document.querySelector(".board-wrapper");
   const nameEntryEl = document.querySelector(".player-name");
+  const winnerEl = document.querySelector(".winner-screen");
+  let _lastWinner = "none";
 
   function _hide(element) {
     element.style.setProperty("opacity", "0");
@@ -36,9 +38,7 @@ const domHandler = (function () {
 
     function show() {
       if (game.playerCount() === 2) {
-        console.log(game.playerCount());
         document.querySelectorAll(".one-player").forEach((element) => {
-          console.log(element);
           element.style.setProperty("display", "none");
         });
         document.querySelectorAll(".two-player").forEach((element) => {
@@ -62,7 +62,38 @@ const domHandler = (function () {
     return { hide, show };
   })();
 
-  return { playerCountWindow, gameBoard, nameEntry };
+  const winnerScreen = (function () {
+    function hide() {
+      _hide(winnerEl);
+    }
+
+    function show() {
+      winnerEl.querySelector("h3").innerText = `${_lastWinner} wins!`;
+      winnerEl
+        .querySelector("button")
+        .addEventListener("click", function playAgainEvent() {
+          winnerEl
+            .querySelector("button")
+            .removeEventListener("click", playAgainEvent);
+          domHandler.winnerScreen.hide();
+          setTimeout(domHandler.playerCountWindow.show, 500);
+        });
+      _show(winnerEl);
+    }
+    return { hide, show };
+  })();
+
+  function setLastWinner(lastWinner) {
+    _lastWinner = lastWinner;
+  }
+
+  return {
+    playerCountWindow,
+    gameBoard,
+    nameEntry,
+    winnerScreen,
+    setLastWinner,
+  };
 })();
 
 const players = (function () {
@@ -97,7 +128,11 @@ const players = (function () {
 
   function getWinnerName(winnerSign) {
     if (winnerSign === "tie") {
+      console.log("It's a tie!");
       return "tie";
+    }
+    if (!players.filter((item) => item.sign === winnerSign)) {
+      return;
     }
     let winnerName = players.filter((item) => item.sign === winnerSign);
     console.log(`${winnerName[0].playerName} wins!`);
@@ -111,6 +146,7 @@ const game = (function () {
   "use strict";
   const gameSettings = {
     players: 1,
+    gameOver: false,
   };
 
   const initializeGame = (function () {
@@ -133,6 +169,14 @@ const game = (function () {
       domHandler.nameEntry.hide();
       setTimeout(domHandler.gameBoard.show, 500);
     });
+    document.querySelector("#p2form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      players.creator(event.target.querySelector("#p2p1name").value);
+      players.creator(event.target.querySelector("#p2name").value);
+      event.target.reset();
+      domHandler.nameEntry.hide();
+      setTimeout(domHandler.gameBoard.show, 500);
+    });
     domHandler.playerCountWindow.show();
   })();
 
@@ -141,6 +185,11 @@ const game = (function () {
   }
 
   function playMove(event) {
+    if (gameSettings.gameOver) {
+      // Keeps the players' signs from flipping if th
+      players.updatePlayerState();
+      gameSettings.gameOver = false;
+    }
     const currentBoard = gameBoard.view();
     if (event.target.dataset.index) {
       // Checks to see if user clocked on a valid area
@@ -169,8 +218,7 @@ const game = (function () {
           checkWinner === "X" ||
           checkWinner === "O"
         ) {
-          gameBoard.disable();
-          players.getWinnerName(checkWinner);
+          _declareWinner(checkWinner);
         }
       }
     }
@@ -207,7 +255,6 @@ const game = (function () {
       }
       if (row[0] === row[1] && row[1] === row[2]) {
         winner = row[0];
-        console.log(winner);
       }
     }
 
@@ -233,6 +280,21 @@ const game = (function () {
     } else {
       return winner;
     }
+  }
+
+  function _declareWinner(checkWinner) {
+    domHandler.gameBoard.hide();
+    gameSettings.gameOver = true;
+    gameBoard.disable();
+    let newLastWinner = players.getWinnerName(checkWinner);
+    domHandler.setLastWinner(newLastWinner);
+    gameBoard.clear();
+    gameBoard.enable();
+    setTimeout(domHandler.winnerScreen.show, 500);
+  }
+
+  function isOver() {
+    return gameSettings.gameOver;
   }
 
   return { playMove, checkWinner, playerCount };

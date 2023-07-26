@@ -10,6 +10,11 @@
   <body>
     <div class="overlay"></div>
     <div class="wrapper">
+      <div class="winner-screen">
+        <h1 class="logo">Game Over!</h1>
+        <h3></h3>
+        <button class="play-again"> Play Again </button>
+      </div>
       <div class="player-pick">
         <h1 class="logo">Tic-Tac-Toe</h1>
         <div class="player-button-wrapper">
@@ -23,20 +28,20 @@
         <div class="name-form one-player">
           <form id="p1form" action="">
             <div class="form-text">
-              <input type="text" id="p1name" name="p1name" required/>
+              <input type="text" id="p1name" name="p1name" required />
             </div>
             <button type="submit">Let's Play!</button>
           </form>
         </div>
         <div class="name-form two-player">
-          <form action="">
+          <form id="p2form" action="">
             <div class="form-text">
               <label for="p1name">PLAYER 1: </label>
-              <input type="text" id="p1name" required/>
+              <input type="text" id="p2p1name" required />
             </div>
             <div class="form-text">
               <label for="p2name">PLAYER 2: </label>
-              <input type="text" id="p2name" required/>
+              <input type="text" id="p2name" required />
             </div>
             <button id="p2submit" type="submit">Let's Play!</button>
           </form>
