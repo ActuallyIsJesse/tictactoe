@@ -68,7 +68,11 @@ const domHandler = (function () {
     }
 
     function show() {
-      winnerEl.querySelector("h3").innerText = `${_lastWinner} wins!`;
+      if (_lastWinner === "tie") {
+        winnerEl.querySelector("h3").innerText = `It's a tie!`;
+      } else {
+        winnerEl.querySelector("h3").innerText = `${_lastWinner} wins!`;
+      }
       winnerEl
         .querySelector("button")
         .addEventListener("click", function playAgainEvent() {
