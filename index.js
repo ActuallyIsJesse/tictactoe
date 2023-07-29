@@ -189,12 +189,21 @@ const game = (function () {
     return gameSettings.players;
   }
 
+  function computerMove() {
+    if (gameSettings.players === 1 && players.active() === "O") {
+      const generatedMove = gameBoard.getRandomSpace();
+      gameBoard.update(players.active(), generatedMove[0], generatedMove[1]);
+      players.updatePlayerState();
+    }
+  }
+
   function playMove(event) {
     if (gameSettings.gameOver) {
-      // Keeps the players' signs from flipping if th
+      // Keeps the players' signs from flipping if the game is replayed
       players.updatePlayerState();
       gameSettings.gameOver = false;
     }
+
     const currentBoard = gameBoard.view();
     if (event.target.dataset.index) {
       // Checks to see if user clocked on a valid area
@@ -224,6 +233,8 @@ const game = (function () {
           checkWinner === "O"
         ) {
           _declareWinner(checkWinner);
+        } else {
+          computerMove();
         }
       }
     }
@@ -302,7 +313,7 @@ const game = (function () {
     return gameSettings.gameOver;
   }
 
-  return { playMove, checkWinner, playerCount };
+  return { playMove, checkWinner, playerCount, computerMove };
 })();
 
 const gameBoard = (function () {
@@ -366,9 +377,21 @@ const gameBoard = (function () {
     }
   }
 
+  function getRandomSpace() {
+    const emptyCells = [];
+    _board.forEach((value, index) => {
+      _board[index].forEach((value, index2) => {
+        if (value === null) {
+          emptyCells.push([index, index2]);
+        }
+      });
+    });
+    return emptyCells[Math.floor(Math.random() * emptyCells.length)];
+  }
+
   const initialize = (function () {
     enable();
   })();
 
-  return { view, update, viewDom, disable, clear, enable };
+  return { view, update, viewDom, disable, clear, enable, getRandomSpace };
 })();
