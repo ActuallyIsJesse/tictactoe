@@ -75,6 +75,7 @@ const domHandler = (function () {
           winnerEl
             .querySelector("button")
             .removeEventListener("click", playAgainEvent);
+          players.clear();
           domHandler.winnerScreen.hide();
           setTimeout(domHandler.playerCountWindow.show, 500);
         });
@@ -114,6 +115,10 @@ const players = (function () {
     return activePlayer;
   }
 
+  function clear() {
+    players = [];
+  }
+
   const creator = (inputName) => {
     let playerName = inputName;
     let sign = active();
@@ -139,7 +144,7 @@ const players = (function () {
     return winnerName[0].playerName;
   }
 
-  return { updatePlayerState, active, creator, list, getWinnerName };
+  return { updatePlayerState, active, creator, list, getWinnerName, clear };
 })();
 
 const game = (function () {
@@ -288,9 +293,9 @@ const game = (function () {
     gameBoard.disable();
     let newLastWinner = players.getWinnerName(checkWinner);
     domHandler.setLastWinner(newLastWinner);
-    gameBoard.clear();
     gameBoard.enable();
     setTimeout(domHandler.winnerScreen.show, 500);
+    setTimeout(gameBoard.clear, 300);
   }
 
   function isOver() {
