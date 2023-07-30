@@ -44,6 +44,13 @@ const domHandler = (function () {
         document.querySelectorAll(".two-player").forEach((element) => {
           element.style.setProperty("display", "flex");
         });
+      } else {
+        document.querySelectorAll(".two-player").forEach((element) => {
+          element.style.setProperty("display", "none");
+        });
+        document.querySelectorAll(".one-player").forEach((element) => {
+          element.style.setProperty("display", "flex");
+        });
       }
       _show(nameEntryEl);
     }
